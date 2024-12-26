@@ -5,6 +5,9 @@ class HotelFormProvider extends ChangeNotifier {
   double _ipmageUploadingProgress = 0;
   Map<String, dynamic> _priceList = {};
 
+  String _mainImageUrl = "";
+  List<String> _otherImageUrls = [];
+
   addNewAmenity({required String amenity}) {
     _amenities.add(amenity);
     notifyListeners();
@@ -30,9 +33,32 @@ class HotelFormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  addMainImageUrl({required String mainImageUrl}) {
+    _mainImageUrl = mainImageUrl;
+    notifyListeners();
+  }
+
+  addOtherImageUrl({required String otherImageUrl}) {
+    _otherImageUrls.add(otherImageUrl);
+    notifyListeners();
+  }
+
+  clearForm() {
+    _amenities = [];
+    _priceList = {};
+    _mainImageUrl = "";
+    _otherImageUrls = [];
+
+    notifyListeners();
+  }
+
   List<String> get allSelectedAmenities => _amenities;
 
   double get progress => _ipmageUploadingProgress;
 
   Map<String, dynamic> get allPackagePrice => _priceList;
+
+  String get updateMainImageUrl => _mainImageUrl;
+
+  List<String> get updatedOtherImageUrls => _otherImageUrls;
 }

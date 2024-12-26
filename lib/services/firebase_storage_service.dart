@@ -43,6 +43,16 @@ class FirebaseStorageService {
               print("Success");
               hotelImageRef.getDownloadURL().then((value) {
                 print("Image URL : $value");
+
+                if (isSingleImageUploading) {
+                  context
+                      .read<HotelFormProvider>()
+                      .addMainImageUrl(mainImageUrl: value);
+                } else {
+                  context
+                      .read<HotelFormProvider>()
+                      .addOtherImageUrl(otherImageUrl: value);
+                }
               });
               break;
             case TaskState.canceled:

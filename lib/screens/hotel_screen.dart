@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_admin_panel/main.dart';
+import 'package:hotel_booking_admin_panel/models/hotel.dart';
 import 'package:hotel_booking_admin_panel/providers/hotel_form_provider.dart';
+import 'package:hotel_booking_admin_panel/services/firebase_service.dart';
 import 'package:hotel_booking_admin_panel/widgets/main_image_selector.dart';
 import 'package:hotel_booking_admin_panel/widgets/multiple_image_selector.dart';
 import 'package:image_picker/image_picker.dart';
@@ -201,9 +204,48 @@ class _HotelScreenState extends State<HotelScreen> {
                           ),
                           TextButton(
                             onPressed: () {
+                              print("Title : ${hotelNameController.text}");
+
+                              print(
+                                  "Amenities : ${context.read<HotelFormProvider>().allSelectedAmenities}");
+
                               print(context
                                   .read<HotelFormProvider>()
                                   .allPackagePrice);
+
+                              print(
+                                  "Main ImageUrl : ${context.read<HotelFormProvider>().updateMainImageUrl}");
+
+                              print(
+                                  "Other ImageUrls : ${context.read<HotelFormProvider>().updatedOtherImageUrls}");
+
+                              print("Location :${googleMapLocationUrl.text}");
+
+                              FirebaseService.upladHotelData(
+                                context,
+                                hotel: Hotel(
+                                  title: hotelNameController.text,
+                                  amenities: context
+                                      .read<HotelFormProvider>()
+                                      .allSelectedAmenities,
+                                  prices: context
+                                      .read<HotelFormProvider>()
+                                      .allPackagePrice,
+                                  mainImage: context
+                                      .read<HotelFormProvider>()
+                                      .updateMainImageUrl,
+                                  otherImages: context
+                                      .read<HotelFormProvider>()
+                                      .updatedOtherImageUrls,
+                                  googleMapLocationUrl:
+                                      googleMapLocationUrl.text,
+                                ),
+                              );
+
+                              hotelNameController.text = "";
+                              googleMapLocationUrl.text = "";
+
+                              //Navigator.pop(context);
                             },
                             child: const Text("SUBMIT"),
                           ),
