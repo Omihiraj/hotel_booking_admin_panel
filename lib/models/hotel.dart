@@ -1,10 +1,10 @@
 class Hotel {
   String? title;
   double rating = 5.0;
-  List<String>? amenities;
+  List<dynamic>? amenities;
   Map<String, dynamic>? prices;
   String? mainImage;
-  List<String>? otherImages;
+  List<dynamic>? otherImages;
   String? googleMapLocationUrl;
 
   Hotel({

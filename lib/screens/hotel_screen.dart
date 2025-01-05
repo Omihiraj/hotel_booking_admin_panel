@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hotel_booking_admin_panel/main.dart';
@@ -22,6 +23,21 @@ class _HotelScreenState extends State<HotelScreen> {
   TextEditingController hotelNameController = TextEditingController();
   TextEditingController aminitiesController = TextEditingController();
   TextEditingController googleMapLocationUrl = TextEditingController();
+
+  List<Hotel>? addedHotels;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    FirebaseService.getHotelData().then((value) {
+      setState(() {
+        addedHotels = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,40 +47,48 @@ class _HotelScreenState extends State<HotelScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      body: GridView.builder(
-        itemCount: 10,
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                width: 200,
-                child: Stack(
-                  children: [
-                    Image.network(
-                      "https://images.pexels.com/photos/338504/pexels-photo-338504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                      fit: BoxFit.fitHeight,
-                    ),
-                    Positioned(
-                      bottom: 95,
-                      child: Container(
-                        height: 50,
-                        width: 300,
-                        color: const Color.fromARGB(198, 0, 0, 0),
-                        child: const Text(
-                          "Sudu Araliya",
-                          style: TextStyle(
-                            color: Colors.white,
+      body: addedHotels == null
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : GridView.builder(
+              itemCount: addedHotels!.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 5),
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                      width: 200,
+                      child: Stack(
+                        children: [
+                          // Image.network(
+                          //   addedHotels![index].mainImage!,
+                          //   fit: BoxFit.fitHeight,
+                          // ),
+
+                          Image(
+                              image: CachedNetworkImageProvider(
+                                  addedHotels![index].mainImage!)),
+                          Positioned(
+                            bottom: 95,
+                            child: Container(
+                              height: 50,
+                              width: 300,
+                              color: const Color.fromARGB(198, 0, 0, 0),
+                              child: Text(
+                                addedHotels![index].title!,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          );
-        },
-      ),
+                        ],
+                      )),
+                );
+              },
+            ),
     );
   }
 

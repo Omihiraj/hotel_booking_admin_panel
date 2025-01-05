@@ -23,4 +23,25 @@ class FirebaseService {
       print("Error Occured $e");
     });
   }
+
+  static Future<List<Hotel>> getHotelData() async {
+    CollectionReference hotelReference =
+        FirebaseFirestore.instance.collection("hotels");
+    List<Hotel> allHotelData = [];
+    await hotelReference.get().then((querySnapshot) {
+      for (var doc in querySnapshot.docs) {
+        allHotelData.add(
+          Hotel(
+            title: doc["title"],
+            amenities: doc["amenities"],
+            mainImage: doc["main-image"],
+            otherImages: doc["other-images"],
+            prices: doc["prices"],
+          ),
+        );
+        print(doc["title"]);
+      }
+    });
+    return allHotelData;
+  }
 }
